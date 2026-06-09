@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FaviForge – Favicon Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- ═══════════════════════════════════════════
+       GOOGLE ADSENSE — Replace with your own IDs
+  ═══════════════════════════════════════════ -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <style>
+    /* ── TOKENS ─────────────────────────────── */
+    :root {
+      --bg:        #080c14;
+      --surface:   #0d1525;
+      --card:      #111d35;
+      --border:    #1e3a5f;
+      --accent:    #00d4ff;
+      --accent2:   #7c3aed;
+      --accent3:   #f59e0b;
+      --text:      #e2eaf5;
+      --muted:     #6b82a8;
+      --danger:    #ef4444;
+      --success:   #22c55e;
+      --font-head: 'Orbitron', sans-serif;
+      --font-body: 'Rajdhani', sans-serif;
+      --r:         10px;
+      --shadow:    0 0 30px rgba(0,212,255,.08);
+    }
+
+    /* ── RESET ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── SCANLINE OVERLAY ───────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #090f1e 0%, #0d1a30 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .logo {
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: grid; place-items: center;
+      font-size: 1.1rem; font-weight: 800;
+      font-family: var(--font-head); color: #fff;
+      box-shadow: 0 0 18px rgba(0,212,255,.4);
+    }
+    .logo h1 {
+      font-family: var(--font-head);
+      font-size: 1.15rem; font-weight: 600;
+      letter-spacing: 2px; color: var(--accent);
+      text-shadow: 0 0 20px rgba(0,212,255,.5);
+    }
+    .logo span { color: var(--muted); font-size: .8rem; display: block; letter-spacing: 1px; }
+    .badge {
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      padding: .25rem .8rem; border-radius: 20px;
+      font-size: .72rem; font-family: var(--font-head); letter-spacing: 1px;
+    }
+
+    /* ── AD STRIP ───────────────────────────── */
+    .ad-strip {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: .6rem 2rem;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 60px;
+    }
+    .ad-placeholder {
+      width: 100%; max-width: 728px; height: 50px;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: .8rem; letter-spacing: 1px;
+    }
+
+    /* ── LAYOUT ─────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── CARD ───────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+    }
+    .card-title {
+      font-family: var(--font-head);
+      font-size: .8rem; letter-spacing: 2px;
+      color: var(--accent); margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .card-title svg { width: 16px; height: 16px; }
+
+    /* ── UPLOAD ZONE ────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .25s;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(0,212,255,.04);
+    }
+    .upload-zone .up-icon { font-size: 2.8rem; margin-bottom: .8rem; }
+    .upload-zone p { color: var(--muted); font-size: .95rem; }
+    .upload-zone strong { color: var(--text); }
+    #fileInput { display: none; }
+
+    /* ── CROP CANVAS ────────────────────────── */
+    .canvas-wrap {
+      position: relative;
+      display: flex; justify-content: center; align-items: center;
+      background: repeating-conic-gradient(#1a2742 0% 25%, #111d35 0% 50%) 0 0 / 20px 20px;
+      border-radius: 8px; min-height: 260px;
+      overflow: hidden;
+    }
+    #sourceCanvas {
+      max-width: 100%; max-height: 260px;
+      display: none; cursor: crosshair;
+    }
+    .canvas-placeholder {
+      color: var(--muted); font-size: .9rem; text-align: center; padding: 2rem;
+    }
+    .crop-overlay {
+      position: absolute; border: 2px solid var(--accent);
+      box-shadow: 0 0 0 9999px rgba(0,0,0,.55);
+      pointer-events: none; display: none;
+    }
+
+    /* ── CONTROLS ───────────────────────────── */
+    .controls { display: flex; flex-direction: column; gap: 1rem; }
+    label { font-size: .85rem; color: var(--muted); letter-spacing: 1px; display: block; margin-bottom: .3rem; }
+    input[type=range] {
+      width: 100%; accent-color: var(--accent);
+      background: transparent; cursor: pointer;
+    }
+    .row { display: flex; gap: .8rem; align-items: center; }
+    .row label { margin: 0; white-space: nowrap; }
+
+    select {
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: .5rem .8rem; border-radius: 6px;
+      font-family: var(--font-body); font-size: .95rem; cursor: pointer;
+    }
+
+    /* ── COLOR PICKER ROW ───────────────────── */
+    .color-row {
+      display: flex; align-items: center; gap: .7rem;
+    }
+    input[type=color] {
+      width: 40px; height: 34px; border: none;
+      border-radius: 6px; cursor: pointer; background: none;
+      padding: 2px;
+    }
+    .color-row span { font-size: .9rem; color: var(--muted); }
+
+    /* ── BUTTONS ────────────────────────────── */
+    .btn {
+      padding: .6rem 1.3rem; border-radius: 7px; border: none;
+      font-family: var(--font-head); font-size: .72rem; letter-spacing: 1.5px;
+      cursor: pointer; transition: all .2s; display: inline-flex;
+      align-items: center; gap: .5rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0,212,255,.25);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,212,255,.4); }
+    .btn-secondary {
+      background: var(--surface); color: var(--accent);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-sm { padding: .45rem 1rem; font-size: .68rem; }
+    .btn-group { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .5rem; }
+
+    /* ── PREVIEW BROWSER TAB ────────────────── */
+    .browser-mock {
+      background: #1c2030;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .browser-chrome {
+      background: #252c42;
+      padding: .6rem .8rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .traffic-lights { display: flex; gap: 5px; }
+    .tl { width: 11px; height: 11px; border-radius: 50%; }
+    .tl-r { background: #ff5f57; }
+    .tl-y { background: #febc2e; }
+    .tl-g { background: #28c840; }
+    .address-bar {
+      flex: 1; background: #1a2032; border-radius: 20px;
+      padding: .3rem 1rem; font-size: .8rem; color: var(--muted);
+      display: flex; align-items: center; gap: .4rem; margin: 0 .5rem;
+    }
+    .address-bar .lock { color: var(--success); font-size: .7rem; }
+
+    /* Tab strip */
+    .tab-strip {
+      background: #1e2640;
+      display: flex; align-items: flex-end;
+      padding: 0 .8rem; gap: 3px;
+      border-bottom: 1px solid #2a3555;
+    }
+    .browser-tab {
+      background: #1c2030; padding: .45rem .9rem;
+      border-radius: 8px 8px 0 0; font-size: .78rem;
+      display: flex; align-items: center; gap: .4rem;
+      color: var(--muted); min-width: 120px; max-width: 200px;
+      border: 1px solid #2a3555; border-bottom: none;
+      cursor: default; position: relative; bottom: -1px;
+    }
+    .browser-tab.active {
+      background: #1c2030; color: var(--text);
+      border-color: #3a4a70; border-bottom-color: #1c2030;
+    }
+    .tab-favicon {
+      width: 16px; height: 16px; border-radius: 2px;
+      background: var(--border); flex-shrink: 0;
+    }
+    .tab-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tab-close { font-size: .65rem; color: var(--muted); padding: 0 2px; }
+    .tab-new { padding: .35rem .6rem; color: var(--muted); font-size: 1rem; cursor: pointer; }
+
+    .browser-body {
+      background: #f8f9ff;
+      min-height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      color: #888; font-size: .9rem; flex-direction: column; gap: .5rem;
+    }
+
+    /* ── SIZE EXPORTS ───────────────────────── */
+    .export-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 1rem;
+    }
+    .export-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; text-align: center;
+      transition: border-color .2s;
+    }
+    .export-item:hover { border-color: var(--accent); }
+    .export-item canvas {
+      display: block; margin: 0 auto .6rem;
+      image-rendering: pixelated;
+      background: repeating-conic-gradient(#1e2a45 0% 25%, #253050 0% 50%) 0 0 / 10px 10px;
+      border-radius: 4px; max-width: 64px; max-height: 64px;
+    }
+    .export-item .size-label {
+      font-family: var(--font-head); font-size: .65rem; color: var(--accent);
+      letter-spacing: 1px; margin-bottom: .5rem;
+    }
+    .export-item .file-type { color: var(--muted); font-size: .75rem; }
+
+    /* ── STATUS BAR ─────────────────────────── */
+    .status {
+      padding: .5rem 1rem;
+      border-radius: 6px; font-size: .85rem;
+      display: none; margin-top: .8rem;
+    }
+    .status.success { background: rgba(34,197,94,.1); border: 1px solid var(--success); color: var(--success); display: block; }
+    .status.error { background: rgba(239,68,68,.1); border: 1px solid var(--danger); color: var(--danger); display: block; }
+    .status.info { background: rgba(0,212,255,.08); border: 1px solid var(--accent); color: var(--accent); display: block; }
+
+    /* ── SECTION LABEL ──────────────────────── */
+    .section-label {
+      font-family: var(--font-head); font-size: .7rem;
+      letter-spacing: 2px; color: var(--muted); margin-bottom: 1rem;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── SIDEBAR AD ─────────────────────────── */
+    .ad-side {
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: var(--r); padding: 1rem;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 250px; gap: .5rem;
+      color: var(--muted); font-size: .8rem; text-align: center;
+    }
+
+    /* ── FOOTER ─────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem; text-align: center;
+      color: var(--muted); font-size: .85rem; margin-top: 2rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── GLOW PULSE ─────────────────────────── */
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(0,212,255,.3); }
+      50%       { box-shadow: 0 0 25px rgba(0,212,255,.6); }
+    }
+    .glow { animation: glow-pulse 2.5s ease-in-out infinite; }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 640px) {
+      header { flex-wrap: wrap; gap: .6rem; }
+      .container { padding: 1rem; }
+      .export-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── TOOLTIP ────────────────────────────── */
+    [data-tip] { position: relative; cursor: help; }
+    [data-tip]::after {
+      content: attr(data-tip);
+      position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+      background: #1a2640; color: var(--text);
+      padding: .35rem .7rem; border-radius: 5px; font-size: .75rem;
+      white-space: nowrap; pointer-events: none;
+      opacity: 0; transition: opacity .2s;
+      border: 1px solid var(--border); z-index: 50;
+    }
+    [data-tip]:hover::after { opacity: 1; }
+
+    /* ── CHECKBOX TOGGLE ────────────────────── */
+    .toggle-row { display: flex; align-items: center; gap: .7rem; }
+    .toggle { position: relative; width: 40px; height: 22px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: var(--border);
+      border-radius: 22px; cursor: pointer; transition: .3s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; left: 3px; bottom: 3px;
+      background: white; border-radius: 50%; transition: .3s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--accent); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">FF</div>
+    <div>
+      <h1>FaviForge</h1>
+      <span>FAVICON GENERATOR PRO</span>
+    </div>
+  </div>
+  <div class="badge">FREE TOOL</div>
+</header>
+
+<!-- ── TOP AD ── -->
+<div class="ad-strip">
+  <!-- Google AdSense Leaderboard 728x90 -->
+  <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px"
+       data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+       data-ad-slot="1234567890"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="container">
+
+  <!-- Row 1: Upload + Crop -->
+  <div class="grid" style="margin-bottom:1.5rem">
+
+    <!-- LEFT: Upload -->
+    <div class="card">
+      <div class="card-title">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        UPLOAD IMAGE
+      </div>
+
+      <div class="upload-zone" id="uploadZone">
+        <div class="up-icon">🖼️</div>
+        <p><strong>Click to upload</strong> or drag &amp; drop</p>
+        <p>PNG, JPG, SVG, WEBP — any size</p>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+
+      <div style="margin-top:1rem" class="controls">
+        <div>
+          <label>BACKGROUND COLOR (for transparent images)</label>
+          <div class="color-row">
+            <input type="color" id="bgColor" value="#ffffff" />
+            <span id="bgHex">#ffffff</span>
+            <div class="toggle-row" style="margin-left:auto">
+              <span style="font-size:.8rem;color:var(--muted)">Transparent</span>
+              <label class="toggle"><input type="checkbox" id="transparentBg"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label>ZOOM / SCALE</label>
+          <input type="range" id="zoomSlider" min="50" max="200" value="100" />
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)">
+            <span>50%</span><span id="zoomVal">100%</span><span>200%</span>
+          </div>
+        </div>
+
+        <div>
+          <label>CROP CORNER RADIUS (for rounded preview)</label>
+          <input type="range" id="radiusSlider" min="0" max="50" value="0" />
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)">
+            <span>Square</span><span id="radiusVal">0%</span><span>Circle</span>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-secondary btn-sm" id="resetBtn">↺ Reset</button>
+          <button class="btn btn-secondary btn-sm" id="flipHBtn">⇆ Flip H</button>
+          <button class="btn btn-secondary btn-sm" id="flipVBtn">⇅ Flip V</button>
+          <button class="btn btn-secondary btn-sm" id="rotateBtn">↻ Rotate 90°</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Live Crop Canvas -->
+    <div class="card">
+      <div class="card-title">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        SQUARE CROP PREVIEW
+      </div>
+      <div class="canvas-wrap" id="canvasWrap">
+        <div class="canvas-placeholder" id="canvasPlaceholder">
+          <div style="font-size:2rem;margin-bottom:.5rem">🎯</div>
+          Upload an image to start cropping
+        </div>
+        <canvas id="sourceCanvas"></canvas>
+        <div class="crop-overlay" id="cropOverlay"></div>
+      </div>
+
+      <div style="margin-top:.8rem" class="controls">
+        <div class="row">
+          <label>EXPORT FORMAT</label>
+          <select id="formatSelect">
+            <option value="image/png">PNG (Recommended)</option>
+            <option value="image/x-icon">ICO</option>
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/webp">WEBP</option>
+          </select>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary glow" id="generateBtn" disabled>
+            ⚡ GENERATE FAVICONS
+          </button>
+          <button class="btn btn-secondary btn-sm" id="downloadAllBtn" disabled>
+            ⬇ DOWNLOAD ALL (ZIP)
+          </button>
+        </div>
+        <div class="status" id="statusMsg"></div>
+      </div>
+    </div>
+
+  </div><!-- /grid row 1 -->
+
+  <!-- ── BROWSER PREVIEW ── -->
+  <div class="section-label">BROWSER TAB PREVIEW</div>
+  <div class="card" style="margin-bottom:1.5rem">
+    <div class="card-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+      MOCK BROWSER — HOW YOUR FAVICON LOOKS IN THE TAB
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:start">
+      <div>
+        <div class="browser-mock">
+          <!-- Chrome bar -->
+          <div class="browser-chrome">
+            <div class="traffic-lights">
+              <div class="tl tl-r"></div>
+              <div class="tl tl-y"></div>
+              <div class="tl tl-g"></div>
+            </div>
+            <div class="address-bar">
+              <span class="lock">🔒</span>
+              <span id="previewUrl">https://yourwebsite.com</span>
+            </div>
+            <span style="color:var(--muted);font-size:.8rem">⋮</span>
+          </div>
+          <!-- Tab strip -->
+          <div class="tab-strip">
+            <div class="browser-tab active">
+              <img class="tab-favicon" id="tabFavicon16" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="favicon" />
+              <span class="tab-title" id="tabTitle">Your Site</span>
+              <span class="tab-close">✕</span>
+            </div>
+            <div class="browser-tab">
+              <div class="tab-favicon" style="background:#555"></div>
+              <span class="tab-title" style="color:var(--muted)">Google</span>
+              <span class="tab-close">✕</span>
+            </div>
+            <div class="browser-tab">
+              <div class="tab-favicon" style="background:#444"></div>
+              <span class="tab-title" style="color:var(--muted)">GitHub</span>
+              <span class="tab-close">✕</span>
+            </div>
+            <div class="tab-new">+</div>
+          </div>
+          <!-- Page body -->
+          <div class="browser-body" id="browserBody">
+            <span style="font-size:2rem">🌐</span>
+            <span>Upload an image to preview your favicon</span>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap">
+          <div>
+            <label>SITE TITLE (tab text)</label>
+            <input type="text" id="siteTitle" placeholder="My Awesome Site" value="My Awesome Site"
+              style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.45rem .8rem;border-radius:6px;font-family:var(--font-body);font-size:.95rem;width:220px" />
+          </div>
+          <div>
+            <label>URL PREVIEW</label>
+            <input type="text" id="siteUrl" placeholder="https://yoursite.com" value="https://yoursite.com"
+              style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.45rem .8rem;border-radius:6px;font-family:var(--font-body);font-size:.95rem;width:220px" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Ad 300x250 -->
+      <div class="ad-side" style="min-width:160px;max-width:200px">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="9876543210"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <span>Advertisement</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EXPORT GRID ── -->
+  <div class="section-label">EXPORT ALL SIZES</div>
+  <div class="card" style="margin-bottom:1.5rem">
+    <div class="card-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      FAVICON SIZES — CLICK ANY TO DOWNLOAD
+    </div>
+    <div class="export-grid" id="exportGrid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- ── HTML CODE ── -->
+  <div class="section-label">HTML HEAD CODE</div>
+  <div class="card" style="margin-bottom:1.5rem">
+    <div class="card-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+      COPY THIS CODE INTO YOUR &lt;HEAD&gt;
+    </div>
+    <pre id="htmlCode" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;font-size:.8rem;color:var(--accent);overflow-x:auto;white-space:pre-wrap;font-family:'Courier New',monospace"><!-- Generate your favicon first --></pre>
+    <div class="btn-group" style="margin-top:.8rem">
+      <button class="btn btn-secondary btn-sm" id="copyCodeBtn">📋 COPY CODE</button>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM AD ── -->
+  <div style="display:flex;justify-content:center;margin-bottom:1.5rem">
+    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1122334455"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>FaviForge — Free Favicon Generator &nbsp;|&nbsp; <a href="#">Privacy Policy</a> &nbsp;|&nbsp; Made with ❤️ for web creators</p>
+</footer>
+
+<!-- ═══════════════════════════════════
+     JSZip for ZIP download
+═══════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════════
+   FaviForge — Core Logic
+══════════════════════════════════════════════════ */
+
+const SIZES = [
+  { w: 16,  h: 16,  label: '16×16',   use: 'Browser Tab / Shortcut' },
+  { w: 32,  h: 32,  label: '32×32',   use: 'Browser Alt / Desktop' },
+  { w: 48,  h: 48,  label: '48×48',   use: 'Windows Icon' },
+  { w: 57,  h: 57,  label: '57×57',   use: 'iOS Legacy' },
+  { w: 64,  h: 64,  label: '64×64',   use: 'Taskbar / General' },
+  { w: 96,  h: 96,  label: '96×96',   use: 'Chrome Web App' },
+  { w: 114, h: 114, label: '114×114', use: 'iOS Retina Legacy' },
+  { w: 128, h: 128, label: '128×128', use: 'Chrome Web Store' },
+  { w: 144, h: 144, label: '144×144', use: 'Windows Tile' },
+  { w: 152, h: 152, label: '152×152', use: 'iPad Retina' },
+  { w: 180, h: 180, label: '180×180', use: 'Apple Touch Icon' },
+  { w: 192, h: 192, label: '192×192', use: 'Android Chrome' },
+  { w: 512, h: 512, label: '512×512', use: 'PWA Splash' },
+];
+
+/* ── State ── */
+let srcImg = null;
+let rotation = 0;
+let flipH = false, flipV = false;
+let isDragging = false, startX, startY;
+let cropX = 0, cropY = 0;
+let zoom = 1;
+let canvasW = 0, canvasH = 0;
+let squareSize = 0;
+let generatedDataURLs = {}; // size -> dataURL
+
+/* ── DOM ── */
+const fileInput     = document.getElementById('fileInput');
+const uploadZone    = document.getElementById('uploadZone');
+const sourceCanvas  = document.getElementById('sourceCanvas');
+const cropOverlay   = document.getElementById('cropOverlay');
+const canvasPlaceholder = document.getElementById('canvasPlaceholder');
+const generateBtn   = document.getElementById('generateBtn');
+const downloadAllBtn = document.getElementById('downloadAllBtn');
+const resetBtn      = document.getElementById('resetBtn');
+const flipHBtn      = document.getElementById('flipHBtn');
+const flipVBtn      = document.getElementById('flipVBtn');
+const rotateBtn     = document.getElementById('rotateBtn');
+const zoomSlider    = document.getElementById('zoomSlider');
+const zoomVal       = document.getElementById('zoomVal');
+const radiusSlider  = document.getElementById('radiusSlider');
+const radiusVal     = document.getElementById('radiusVal');
+const bgColor       = document.getElementById('bgColor');
+const bgHex         = document.getElementById('bgHex');
+const transparentBg = document.getElementById('transparentBg');
+const formatSelect  = document.getElementById('formatSelect');
+const statusMsg     = document.getElementById('statusMsg');
+const exportGrid    = document.getElementById('exportGrid');
+const tabFavicon16  = document.getElementById('tabFavicon16');
+const tabTitle      = document.getElementById('tabTitle');
+const previewUrl    = document.getElementById('previewUrl');
+const siteTitle     = document.getElementById('siteTitle');
+const siteUrl       = document.getElementById('siteUrl');
+const htmlCode      = document.getElementById('htmlCode');
+const copyCodeBtn   = document.getElementById('copyCodeBtn');
+const browserBody   = document.getElementById('browserBody');
+const canvasWrap    = document.getElementById('canvasWrap');
+const ctx           = sourceCanvas.getContext('2d');
+
+/* ── Build empty export grid ── */
+function buildExportGrid() {
+  exportGrid.innerHTML = '';
+  SIZES.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'export-item';
+    item.id = `exp-${s.w}x${s.h}`;
+    item.innerHTML = `
+      <canvas width="${Math.min(s.w, 64)}" height="${Math.min(s.h, 64)}" id="prev-${s.w}x${s.h}" style="width:${Math.min(s.w,64)}px;height:${Math.min(s.h,64)}px"></canvas>
+      <div class="size-label">${s.label}</div>
+      <div class="file-type" style="font-size:.7rem;margin-bottom:.4rem;color:var(--muted)">${s.use}</div>
+      <button class="btn btn-secondary btn-sm" onclick="downloadSize(${s.w},${s.h})" disabled id="dl-${s.w}x${s.h}">⬇ PNG</button>
+    `;
+    exportGrid.appendChild(item);
+  });
+}
+buildExportGrid();
+
+/* ── Upload ── */
+uploadZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => { if (e.target.files[0]) loadImage(e.target.files[0]); });
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) loadImage(e.dataTransfer.files[0]);
+});
+
+function loadImage(file) {
+  if (!file.type.startsWith('image/')) { showStatus('Please upload a valid image file.', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      srcImg = img; rotation = 0; flipH = false; flipV = false;
+      zoomSlider.value = 100; zoom = 1;
+      drawSource();
+      generateBtn.disabled = false;
+      showStatus('Image loaded! Adjust crop then click Generate.', 'info');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── Draw source canvas ── */
+function drawSource() {
+  if (!srcImg) return;
+
+  const maxW = canvasWrap.clientWidth - 4;
+  const maxH = 260;
+
+  // Account for rotation swap
+  let natW = (rotation % 180 === 0) ? srcImg.naturalWidth  : srcImg.naturalHeight;
+  let natH = (rotation % 180 === 0) ? srcImg.naturalHeight : srcImg.naturalWidth;
+
+  const scale = Math.min(maxW / natW, maxH / natH) * zoom;
+  canvasW = Math.round(natW * scale);
+  canvasH = Math.round(natH * scale);
+  squareSize = Math.min(canvasW, canvasH);
+
+  sourceCanvas.width  = canvasW;
+  sourceCanvas.height = canvasH;
+  sourceCanvas.style.display = 'block';
+  canvasPlaceholder.style.display = 'none';
+
+  ctx.save();
+  ctx.clearRect(0, 0, canvasW, canvasH);
+
+  // Background
+  if (!transparentBg.checked) {
+    ctx.fillStyle = bgColor.value;
+    ctx.fillRect(0, 0, canvasW, canvasH);
+  }
+
+  // Center & rotate & flip
+  ctx.translate(canvasW/2, canvasH/2);
+  ctx.rotate(rotation * Math.PI / 180);
+  ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+  ctx.drawImage(srcImg,
+    -(rotation % 180 === 0 ? canvasW : canvasH)/2,
+    -(rotation % 180 === 0 ? canvasH : canvasW)/2,
+    (rotation % 180 === 0 ? canvasW : canvasH),
+    (rotation % 180 === 0 ? canvasH : canvasW));
+  ctx.restore();
+
+  updateCropOverlay();
+}
+
+/* ── Crop overlay ── */
+function updateCropOverlay() {
+  if (!srcImg) return;
+  squareSize = Math.min(canvasW, canvasH);
+  // clamp crop position
+  cropX = Math.max(0, Math.min(cropX, canvasW - squareSize));
+  cropY = Math.max(0, Math.min(cropY, canvasH - squareSize));
+
+  const rect = sourceCanvas.getBoundingClientRect();
+  const scaleX = canvasW / rect.width;
+  const scaleY = canvasH / rect.height;
+
+  cropOverlay.style.display = 'block';
+  cropOverlay.style.left   = (cropX / scaleX) + 'px';
+  cropOverlay.style.top    = (cropY / scaleY) + 'px';
+  cropOverlay.style.width  = (squareSize / scaleX) + 'px';
+  cropOverlay.style.height = (squareSize / scaleY) + 'px';
+}
+
+/* ── Drag to move crop ── */
+sourceCanvas.addEventListener('mousedown', e => {
+  isDragging = true; startX = e.clientX; startY = e.clientY;
+});
+document.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  const rect = sourceCanvas.getBoundingClientRect();
+  const sx = canvasW / rect.width;
+  const sy = canvasH / rect.height;
+  cropX += (e.clientX - startX) * sx;
+  cropY += (e.clientY - startY) * sy;
+  startX = e.clientX; startY = e.clientY;
+  updateCropOverlay();
+});
+document.addEventListener('mouseup', () => { isDragging = false; });
+
+/* Touch */
+sourceCanvas.addEventListener('touchstart', e => {
+  isDragging = true;
+  startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchmove', e => {
+  if (!isDragging) return;
+  const rect = sourceCanvas.getBoundingClientRect();
+  const sx = canvasW / rect.width; const sy = canvasH / rect.height;
+  cropX += (e.touches[0].clientX - startX) * sx;
+  cropY += (e.touches[0].clientY - startY) * sy;
+  startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+  updateCropOverlay();
+}, { passive: true });
+document.addEventListener('touchend', () => { isDragging = false; });
+
+/* ── Controls ── */
+zoomSlider.addEventListener('input', () => {
+  zoom = zoomSlider.value / 100;
+  zoomVal.textContent = zoomSlider.value + '%';
+  drawSource();
+});
+radiusSlider.addEventListener('input', () => {
+  radiusVal.textContent = radiusSlider.value + '%';
+});
+bgColor.addEventListener('input', () => {
+  bgHex.textContent = bgColor.value;
+  drawSource();
+});
+transparentBg.addEventListener('change', drawSource);
+
+resetBtn.addEventListener('click', () => {
+  if (!srcImg) return;
+  rotation = 0; flipH = false; flipV = false;
+  zoom = 1; zoomSlider.value = 100; zoomVal.textContent = '100%';
+  radiusSlider.value = 0; radiusVal.textContent = '0%';
+  cropX = 0; cropY = 0;
+  drawSource();
+});
+flipHBtn.addEventListener('click', () => { flipH = !flipH; drawSource(); });
+flipVBtn.addEventListener('click', () => { flipV = !flipV; drawSource(); });
+rotateBtn.addEventListener('click', () => {
+  rotation = (rotation + 90) % 360;
+  [canvasW, canvasH] = [canvasH, canvasW]; // swap
+  drawSource();
+});
+
+siteTitle.addEventListener('input', () => { tabTitle.textContent = siteTitle.value || 'Your Site'; });
+siteUrl.addEventListener('input', () => { previewUrl.textContent = siteUrl.value || 'https://yourwebsite.com'; });
+
+/* ── Get cropped square data ── */
+function getCroppedSquare(size) {
+  const offscreen = document.createElement('canvas');
+  offscreen.width = size; offscreen.height = size;
+  const oc = offscreen.getContext('2d');
+
+  const radius = (radiusSlider.value / 100) * (size / 2);
+
+  // Background
+  if (!transparentBg.checked) {
+    oc.fillStyle = bgColor.value;
+    oc.fillRect(0, 0, size, size);
+  }
+
+  // Rounded clip
+  if (radius > 0) {
+    oc.beginPath();
+    oc.moveTo(radius, 0);
+    oc.lineTo(size - radius, 0);
+    oc.quadraticCurveTo(size, 0, size, radius);
+    oc.lineTo(size, size - radius);
+    oc.quadraticCurveTo(size, size, size - radius, size);
+    oc.lineTo(radius, size);
+    oc.quadraticCurveTo(0, size, 0, size - radius);
+    oc.lineTo(0, radius);
+    oc.quadraticCurveTo(0, 0, radius, 0);
+    oc.closePath();
+    oc.clip();
+  }
+
+  // Draw from main canvas crop region
+  oc.drawImage(sourceCanvas, cropX, cropY, squareSize, squareSize, 0, 0, size, size);
+  return offscreen;
+}
+
+/* ── Generate ── */
+generateBtn.addEventListener('click', () => {
+  if (!srcImg) return;
+  generatedDataURLs = {};
+  const fmt = formatSelect.value === 'image/x-icon' ? 'image/png' : formatSelect.value;
+  const ext = fmt === 'image/jpeg' ? 'jpg' : fmt === 'image/webp' ? 'webp' : 'png';
+
+  SIZES.forEach(s => {
+    const off = getCroppedSquare(s.w);
+    const dataURL = off.toDataURL(fmt, 0.95);
+    generatedDataURLs[`${s.w}x${s.h}`] = { dataURL, ext, fmt };
+
+    // Update preview canvas
+    const prev = document.getElementById(`prev-${s.w}x${s.h}`);
+    const pc = prev.getContext('2d');
+    pc.clearRect(0, 0, prev.width, prev.height);
+    pc.drawImage(off, 0, 0, prev.width, prev.height);
+
+    // Enable download button
+    const dlBtn = document.getElementById(`dl-${s.w}x${s.h}`);
+    dlBtn.disabled = false;
+    dlBtn.textContent = `⬇ ${ext.toUpperCase()}`;
+  });
+
+  // Update browser tab preview (16x16)
+  const prev16 = generatedDataURLs['16x16'];
+  if (prev16) {
+    tabFavicon16.src = prev16.dataURL;
+    tabFavicon16.style.width = '16px'; tabFavicon16.style.height = '16px';
+    browserBody.innerHTML = `
+      <div style="font-size:3rem">${tabFavicon16.src ? '✅' : '🌐'}</div>
+      <div style="color:#555;font-size:.9rem">Favicon applied! Check the tab above.</div>
+    `;
+  }
+
+  downloadAllBtn.disabled = false;
+  generateHtmlCode(ext);
+  showStatus('✅ All favicon sizes generated! Click any size to download.', 'success');
+});
+
+/* ── Download single size ── */
+function downloadSize(w, h) {
+  const key = `${w}x${h}`;
+  if (!generatedDataURLs[key]) return;
+  const { dataURL, ext } = generatedDataURLs[key];
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = `favicon-${key}.${ext}`;
+  a.click();
+}
+window.downloadSize = downloadSize;
+
+/* ── Download all as ZIP ── */
+downloadAllBtn.addEventListener('click', async () => {
+  if (!window.JSZip) { showStatus('JSZip not loaded. Try refreshing.', 'error'); return; }
+  const zip = new JSZip();
+  const folder = zip.folder('favicons');
+  Object.entries(generatedDataURLs).forEach(([key, { dataURL, ext }]) => {
+    const b64 = dataURL.split(',')[1];
+    folder.file(`favicon-${key}.${ext}`, b64, { base64: true });
+  });
+  // Add HTML readme
+  folder.file('README.html', document.getElementById('htmlCode').textContent);
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'favicons.zip'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ── Generate HTML code ── */
+function generateHtmlCode(ext) {
+  const code = `<!-- Standard Favicon -->
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.${ext}">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.${ext}">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.${ext}">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="57x57"   href="/favicon-57x57.${ext}">
+<link rel="apple-touch-icon" sizes="114x114" href="/favicon-114x114.${ext}">
+<link rel="apple-touch-icon" sizes="152x152" href="/favicon-152x152.${ext}">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.${ext}">
+
+<!-- Android / Chrome -->
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.${ext}">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.${ext}">
+
+<!-- Windows Tile -->
+<meta name="msapplication-TileImage" content="/favicon-144x144.${ext}">
+<meta name="msapplication-TileColor" content="#080c14">
+
+<!-- Web App Manifest -->
+<link rel="manifest" href="/site.webmanifest">`;
+  htmlCode.textContent = code;
+}
+
+/* ── Copy code ── */
+copyCodeBtn.addEventListener('click', () => {
+  const text = htmlCode.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    copyCodeBtn.textContent = '✅ COPIED!';
+    setTimeout(() => { copyCodeBtn.textContent = '📋 COPY CODE'; }, 2000);
+  });
+});
+
+/* ── Status helper ── */
+function showStatus(msg, type) {
+  statusMsg.textContent = msg;
+  statusMsg.className = `status ${type}`;
+}
+
+/* ── Resize handler ── */
+window.addEventListener('resize', () => { if (srcImg) { drawSource(); } });
+</script>
+</body>
+</html>
